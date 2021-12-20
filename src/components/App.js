@@ -1,18 +1,27 @@
+import React, { useState } from "react";
 import video from "../data/video.js";
+import Video from "./Video"
+import Comments from "./Comments"
 
 function App() {
-  console.log("Here's your data:", video);
+  const [hideComments, setHideComments] = useState(true)
+  const [commentList, setCommentList] = useState(video.comments)
+
+  function handleDeleteComment (deletedCommentId) {
+    setCommentList(commentList.filter(comment => comment.id !== deletedCommentId))
+  }
+
+  function handleHideComments() {
+    setHideComments(!hideComments)
+  }
 
   return (
     <div className="App">
-      <iframe
-        width="919"
-        height="525"
-        src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-        frameBorder="0"
-        allowFullScreen
-        title="Thinking in React"
-      />
+      <Video video={video}/>
+      <button onClick={handleHideComments}>
+        {hideComments ? "Hide Comments" : "Show Comments"}
+      </button>
+      {hideComments ? <Comments onDeleteComment={handleDeleteComment} comments={commentList} /> : null}
     </div>
   );
 }
